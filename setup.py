@@ -6,7 +6,8 @@ REQUIREMENTS = [
     'django-filer',
     'django-hvad',
     'django_select2',
-    'django-taggit<0.12',
+    # last version that supports django 1.5
+    'django-taggit<=0.18.1',
     'djangocms-text-ckeditor',
     'translitcodec',
     'Unidecode',
