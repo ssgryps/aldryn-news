@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+0.1.21 (2019-03-18)
+------------------
+
+* add support for djangocms 3.2 (rename cms_app.py and cms_toolbar.py)
+
+
 0.1.20 (2019-03-17)
 ------------------
 
