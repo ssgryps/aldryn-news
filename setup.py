@@ -5,9 +5,8 @@ from aldryn_news import __version__
 REQUIREMENTS = [
     'django-filer',
     'django-hvad',
-    'django_select2',
-    # last version that supports django 1.5
-    'django-taggit<=0.18.1',
+    'django_select2==4.3.2',
+    'django-taggit',
     'djangocms-text-ckeditor',
     'translitcodec',
     'Unidecode',
@@ -32,7 +31,7 @@ setup(
     description='Publish news in django CMS',
     author='Divio AG',
     author_email='info@divio.ch',
-    url='https://github.com/aldryn/aldryn-news',
+    url='https://github.com/softformance/aldryn-news',
     packages=find_packages(),
     license='LICENSE.txt',
     platforms=['OS Independent'],

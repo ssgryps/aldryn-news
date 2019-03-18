@@ -5,13 +5,13 @@ from aldryn_news.forms import NewsForm, CategoryForm
 from aldryn_news.models import News, Category, Tag, TaggedItem
 
 import cms
-from cms.admin.placeholderadmin import PlaceholderAdmin
-from cms.admin.placeholderadmin import FrontendEditableAdmin
+from cms.admin.placeholderadmin import PlaceholderAdminMixin
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from distutils.version import LooseVersion
 from hvad.admin import TranslatableAdmin
 
 
-class NewsAdmin(FrontendEditableAdmin, TranslatableAdmin, PlaceholderAdmin):
+class NewsAdmin(FrontendEditableAdminMixin, TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
 
     list_display = ['__unicode__', 'publication_start', 'publication_end', 'all_translations']
     form = NewsForm

@@ -88,5 +88,5 @@ class PublishedManager(RelatedManager):
 
 class TagManager(TranslationManager):
 
-    def get_query_set(self):
+    def get_queryset(self):
         return self.language()
