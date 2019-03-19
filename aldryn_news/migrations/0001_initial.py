@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('taggit', '0002_auto_20150616_2121'),
         ('filer', '0007_auto_20161016_1055'),
-        ('cms', '0013_auto_20160404_1908'),
+        ('cms', '0012_auto_20150607_2207'),
         ('contenttypes', '0001_initial'),
     ]
 
