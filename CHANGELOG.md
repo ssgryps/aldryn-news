@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+0.1.21 (2019-03-19)
+------------------
+
+* pin django-select2 to 5.11.1
+* fix at code to according library
+
+
 0.1.21 (2019-03-18)
 ------------------
 

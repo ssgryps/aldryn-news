@@ -4,8 +4,7 @@ from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, get_language
 
-# from django_select2.forms import Select2MultipleWidget, Select2Mixin
-import django_select2
+from django_select2.forms import Select2MultipleWidget, Select2Mixin
 from hvad.forms import TranslatableModelForm
 import taggit
 from unidecode import unidecode
@@ -17,13 +16,12 @@ class MultipleTagForm(forms.ModelForm):
 
     class Meta:
         widgets = {
-            # 'tags': Select2MultipleWidget
-            'tags': django_select2.Select2MultipleWidget
+            'tags': Select2MultipleWidget
         }
+        fields = '__all__'
 
 
-# class NewsTagWidget(Select2Mixin, taggit.forms.TagWidget):
-class NewsTagWidget(django_select2.widgets.Select2Mixin, taggit.forms.TagWidget):
+class NewsTagWidget(Select2Mixin, taggit.forms.TagWidget):
 
     def __init__(self, *args, **kwargs):
         options = kwargs.get('select2_options', {})
