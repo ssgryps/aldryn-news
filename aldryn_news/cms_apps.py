@@ -9,7 +9,10 @@ from cms.apphook_pool import apphook_pool
 
 class NewsApp(CMSApp):
     name = _('News')
-    urls = ['aldryn_news.urls']
     menus = [NewsCategoryMenu]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return ['aldryn_news.urls']
+
 
 apphook_pool.register(NewsApp)
