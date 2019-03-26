@@ -27,9 +27,9 @@ class CategoryManager(TranslationManager):
 
 class RelatedManager(TranslationManager):
 
-    def using_translations(self):
+    def language(self, language_code=None):
         # not overriding get_queryset, as hvad doesn't use that
-        qs = super(RelatedManager, self).using_translations()
+        qs = super(RelatedManager, self).language(language_code)
         qs = qs.select_related('key_visual')
         # bug in hvad - Meta ordering isn't preserved
         qs = qs.order_by('-publication_start')
@@ -76,9 +76,9 @@ class RelatedManager(TranslationManager):
 
 class PublishedManager(RelatedManager):
 
-    def using_translations(self):
+    def language(self, language_code=None):
         # not overriding get_queryset, as hvad doesn't use that
-        qs = super(PublishedManager, self).using_translations()
+        qs = super(PublishedManager, self).language(language_code)
         qs = qs.filter(publication_start__lte=timezone.now())
         qs = qs.filter(models.Q(publication_end__isnull=True) | models.Q(publication_end__gte=timezone.now()))
         return qs
