@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.utils.translation import ugettext_lazy as _
-
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+from django.utils.translation import ugettext_lazy as _
 
 from aldryn_news import models
-from aldryn_news.forms import MultipleTagForm, LinksForm
+from aldryn_news.forms import LinksForm, MultipleTagForm
 
 
 class NewsPluginBase(CMSPluginBase):

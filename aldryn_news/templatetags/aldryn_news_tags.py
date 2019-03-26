@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
+from cms.utils import get_language_from_request
 from django import template
 from django.conf import settings
 from django.utils.translation import get_language
 
-from cms.utils import get_language_from_request
-
 from aldryn_news.models import News
-
 
 register = template.Library()
 

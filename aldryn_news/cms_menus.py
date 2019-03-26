@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import NoReverseMatch
-from django.db.models.signals import post_save, post_delete
-from django.utils.translation import ugettext_lazy as _
-
-from aldryn_news.models import Category
-
 from cms.menu_bases import CMSAttachMenu
+from django.core.urlresolvers import NoReverseMatch
+from django.db.models.signals import post_delete, post_save
+from django.utils.translation import ugettext_lazy as _
 from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
+
+from aldryn_news.models import Category
 
 
 class NewsCategoryMenu(CMSAttachMenu):

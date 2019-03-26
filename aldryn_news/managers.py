@@ -5,9 +5,7 @@ from collections import Counter
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
-
 from hvad.models import TranslationManager
-
 from taggit.models import Tag, TaggedItem
 
 

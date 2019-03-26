@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.views.generic.dates import ArchiveIndexView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.shortcuts import get_object_or_404
-from django.http import Http404
+from menus.utils import set_language_changer
 
 from aldryn_news import request_news_identifier
-from aldryn_news.models import News, Category, Tag
-
-from menus.utils import set_language_changer
+from aldryn_news.models import Category, News, Tag
 
 
 class BaseNewsView(object):
