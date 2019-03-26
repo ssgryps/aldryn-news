@@ -2,14 +2,12 @@
 from django import forms
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext, get_language
-
-from django_select2.forms import Select2MultipleWidget, Select2Mixin
+from django.utils.translation import get_language, ugettext
+from django_select2.forms import Select2MultipleWidget
 from hvad.forms import TranslatableModelForm
-import taggit
 from unidecode import unidecode
 
-from .models import Tag, News
+from .models import News
 
 
 class MultipleTagForm(forms.ModelForm):
@@ -19,20 +17,6 @@ class MultipleTagForm(forms.ModelForm):
             'tags': Select2MultipleWidget
         }
         fields = '__all__'
-
-
-class NewsTagWidget(Select2Mixin, taggit.forms.TagWidget):
-
-    def __init__(self, *args, **kwargs):
-        options = kwargs.get('select2_options', {})
-        options['tags'] = list(Tag.objects.values_list('name', flat=True))
-        options['tokenSeparators'] = [' ', ',']
-        kwargs['select2_options'] = options
-        super(NewsTagWidget, self).__init__(*args, **kwargs)
-
-    def render_js_code(self, *args, **kwargs):
-        js_code = super(NewsTagWidget, self).render_js_code(*args, **kwargs)
-        return js_code.replace('$', 'jQuery')
 
 
 class AutoSlugForm(TranslatableModelForm):
@@ -104,7 +88,6 @@ class AutoSlugForm(TranslatableModelForm):
 
 
 class CategoryForm(AutoSlugForm):
-
     slugified_field = 'name'
 
     class Meta:
@@ -112,13 +95,7 @@ class CategoryForm(AutoSlugForm):
 
 
 class NewsForm(AutoSlugForm):
-
     slugified_field = 'title'
-
-    class Meta:
-        widgets = {
-            'tags': NewsTagWidget
-        }
 
 
 class LinksForm(forms.ModelForm):
