@@ -43,6 +43,9 @@ class AutoSlugForm(TranslatableModelForm):
     def clean(self):
         super(AutoSlugForm, self).clean()
 
+        # Fix 'This QueryDict instance is immutable'
+        self.data = self.data.copy()
+
         if not self.fields.get(self.slug_field):
             return self.cleaned_data
 
