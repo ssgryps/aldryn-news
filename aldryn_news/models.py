@@ -86,11 +86,13 @@ class Tag(TranslatableModel):
 
     translations = TranslatedFields(
         name=models.CharField(_('Name'), max_length=255),
-        slug=models.SlugField(verbose_name=_('Slug'), max_length=100),
-        meta={'unique_together': [['slug', 'language_code']]}
+        slug=models.SlugField(verbose_name=_('Slug'), max_length=100)
     )
 
     objects = TagManager()
+
+    class Meta:
+        unique_together = (('slug', 'language_code'),)
 
     def __unicode__(self):
         return self.name
@@ -140,8 +142,7 @@ class News(TranslatableModel):
                               help_text=_('Auto-generated. Clean it to have it re-created. '
                                           'WARNING! Used in the URL. If changed, the URL will change. ')),
         lead_in=HTMLField(_('Lead-in'),
-                          help_text=_('Will be displayed in lists, and at the start of the detail page')),
-        meta={'unique_together': [['slug', 'language_code']]}
+                          help_text=_('Will be displayed in lists, and at the start of the detail page'))
     )
     key_visual = FilerImageField(verbose_name=_('Key Visual'), blank=True, null=True)
     content = PlaceholderField('blog_post_content')
@@ -158,6 +159,7 @@ class News(TranslatableModel):
         verbose_name = _('News')
         verbose_name_plural = _('News')
         ordering = ['-publication_start']
+        unique_together = (('slug', 'language_code'),)
 
     def __unicode__(self):
         return self.lazy_translation_getter('title', str(self.pk))
