@@ -10,7 +10,6 @@ from aldryn_news.models import Category
 
 
 class NewsCategoryMenu(CMSAttachMenu):
-
     name = _('News')
 
     def get_nodes(self, request):
@@ -28,11 +27,12 @@ class NewsCategoryMenu(CMSAttachMenu):
                 pass
         return nodes
 
-menu_pool.register_menu(NewsCategoryMenu)
-
 
 def clear_menu_cache(**kwargs):
     menu_pool.clear(all=True)
 
+
 post_save.connect(clear_menu_cache, sender=Category)
 post_delete.connect(clear_menu_cache, sender=Category)
+
+menu_pool.register_menu(NewsCategoryMenu)

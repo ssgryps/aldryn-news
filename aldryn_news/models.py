@@ -19,7 +19,7 @@ from taggit.models import (GenericTaggedItemBase as TaggitGenericTaggedItemBase,
                            ItemBase as TaggitItemBase)
 from unidecode import unidecode
 
-from .managers import (CategoryManager, PublishedManager, RelatedManager, TagManager)
+from .managers import (CategoryManager, PublishedManager, RelatedManager, TagManager, CustomTaggableManager)
 
 
 def get_slug_in_language(record, language):
@@ -95,7 +95,14 @@ class Tag(TranslatableModel):
         unique_together = (('slug', 'language_code'),)
 
     def __unicode__(self):
-        return self.name
+        return self.lazy_translation_getter('name', str(self.pk))
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            # Newly created object, so set slug
+            self.slug = slugify(unidecode(self.name))
+
+        super(Tag, self).save(*args, **kwargs)
 
     @classmethod
     def save_translations(cls, instance, **kwargs):
@@ -126,6 +133,7 @@ class TaggedItemBase(TaggitItemBase):
         }).distinct()
 
 
+# Used for model News
 class TaggedItem(TaggitGenericTaggedItemBase, TaggedItemBase):
 
     class Meta:
@@ -153,7 +161,7 @@ class News(TranslatableModel):
                                  help_text=_('WARNING! Used in the URL. If changed, the URL will change.'))
     objects = RelatedManager()
     published = PublishedManager()
-    tags = TaggableManager(blank=True, through=TaggedItem)
+    tags = TaggableManager(blank=True, through=TaggedItem, manager=CustomTaggableManager)
 
     class Meta:
         verbose_name = _('News')
