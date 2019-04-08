@@ -24,7 +24,8 @@ def render_plugin(request, plugin_instance):
 class NewsIndex(get_index_base()):
     haystack_use_for_indexing = getattr(settings, "ALDRYN_NEWS_SEARCH", True)
 
-    INDEX_TITLE = True
+    INDEX_TITLE = True  # for backward compatibility until 1.1.0 aldryn-search
+    index_title = True
 
     def get_title(self, obj):
         return obj.title
