@@ -10,7 +10,7 @@ from aldryn_news.forms import CategoryForm, NewsForm
 from aldryn_news.models import Category, News, Tag, TaggedItem
 
 
-class NewsAdmin(TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin):
+class NewsAdmin(TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin, admin.ModelAdmin):
     list_display = ['__unicode__', 'publication_start', 'publication_end', 'all_translations']
     form = NewsForm
     frontend_editable_fields = ('title', 'lead_in')
