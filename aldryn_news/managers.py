@@ -2,11 +2,10 @@
 import datetime
 from collections import Counter
 
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models, router
 from django.db.models import signals
-from django.utils import timezone, six
+from django.utils import timezone
 from hvad.models import TranslationManager
 from taggit.managers import _TaggableManager
 from taggit.models import Tag, TaggedItem
