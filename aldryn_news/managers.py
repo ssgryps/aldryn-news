@@ -58,7 +58,7 @@ class RelatedManager(TranslationManager):
                                       .values_list('tag', 'count'))
 
         # and finally get the results
-        tags = Tag.objects.filter(pk__in=counted_tags.keys())
+        tags = Tag.objects.filter(pk__in=list(counted_tags.keys()))
         for tag in tags:
             tag.count = counted_tags[tag.pk]
         return sorted(tags, key=lambda x: -x.count)

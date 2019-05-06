@@ -11,7 +11,7 @@ from aldryn_news.models import Category, News, Tag, TaggedItem
 
 
 class NewsAdmin(TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin, admin.ModelAdmin):
-    list_display = ['__unicode__', 'publication_start', 'publication_end', 'all_translations']
+    list_display = ['__str__', 'publication_start', 'publication_end', 'all_translations']
     form = NewsForm
     frontend_editable_fields = ('title', 'lead_in')
 
@@ -33,7 +33,7 @@ class NewsAdmin(TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminM
 
 class CategoryAdmin(TranslatableAdmin):
     form = CategoryForm
-    list_display = ['__unicode__', 'all_translations', 'ordering']
+    list_display = ['__str__', 'all_translations', 'ordering']
     list_editable = ['ordering']
 
     def get_fieldsets(self, request, obj=None):
@@ -48,7 +48,7 @@ class TaggedItemInline(admin.StackedInline):
 
 
 class TagAdmin(TranslatableAdmin):
-    list_display = ['__unicode__', 'all_translations']
+    list_display = ['__str__', 'all_translations']
     inlines = [TaggedItemInline]
 
     def get_fieldsets(self, request, obj=None):

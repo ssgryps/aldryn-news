@@ -65,7 +65,7 @@ class Category(TranslatableModel):
         ordering = ['ordering']
         unique_together = (('slug', 'language_code'),)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.lazy_translation_getter('name', str(self.pk))
 
     def get_absolute_url(self, language=None):
@@ -94,7 +94,7 @@ class Tag(TranslatableModel):
     class Meta:
         unique_together = (('slug', 'language_code'),)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.lazy_translation_getter('name', str(self.pk))
 
     def save(self, *args, **kwargs):
@@ -169,7 +169,7 @@ class News(TranslatableModel):
         ordering = ['-publication_start']
         unique_together = (('slug', 'language_code'),)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.lazy_translation_getter('title', str(self.pk))
 
     def get_absolute_url(self, language=None):
@@ -213,7 +213,7 @@ class LatestNewsPlugin(CMSPlugin):
     type_list = models.CharField(verbose_name=_("Type of list"), choices=TYPES, default=FULL, max_length=255)
     tags = models.ManyToManyField('taggit.Tag', blank=True, help_text=_('Show only the news tagged with chosen tags.'))
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.latest_entries)
 
     def copy_relations(self, oldinstance):
