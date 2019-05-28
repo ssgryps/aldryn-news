@@ -6,7 +6,10 @@ from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import NoReverseMatch, reverse
+try:
+    from django.core.urlresolvers import reverse, NoReverseMatch
+except ImportError:
+    from django.urls import reverse, NoReverseMatch
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import override, ugettext_lazy as _
