@@ -6,6 +6,7 @@ from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+
 try:
     from django.core.urlresolvers import reverse, NoReverseMatch
 except ImportError:
@@ -16,7 +17,8 @@ from django.utils.translation import override, ugettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from hvad.models import TranslatableModel, TranslatedFields
-from hvad.utils import get_translation
+from hvad.utils import get_translation, get_cached_translation
+from hvad import VERSION as HVAD_VERSION
 from taggit.managers import TaggableManager
 from taggit.models import (GenericTaggedItemBase as TaggitGenericTaggedItemBase,
                            ItemBase as TaggitItemBase)
@@ -28,15 +30,19 @@ from .managers import (CategoryManager, PublishedManager, RelatedManager, TagMan
 def get_slug_in_language(record, language):
     if not record:
         return None
-    if hasattr(record, record._meta.translations_cache) and language == record.language_code:  # possibly no need to hit db, try cache
-        return record.lazy_translation_getter('slug')
-    else:  # hit db
-        try:
-            translation = get_translation(record, language_code=language)
-        except models.ObjectDoesNotExist:
-            return None
-        else:
-            return translation.slug
+    if HVAD_VERSION >= (2, 0, 0):
+        if get_cached_translation(record) and language == record.language_code:
+            return getattr(record.translations.active, 'slug', None)
+    else:
+        if hasattr(record, record._meta.translations_cache) and language == record.language_code:  # possibly no need to hit db, try cache
+            return record.lazy_translation_getter('slug')
+
+    try:
+        translation = get_translation(record, language_code=language)
+    except models.ObjectDoesNotExist:
+        return None
+    else:
+        return translation.slug
 
 
 def get_page_url(name, language):
@@ -69,7 +75,11 @@ class Category(TranslatableModel):
         unique_together = (('slug', 'language_code'),)
 
     def __str__(self):
-        return self.lazy_translation_getter('name', str(self.pk))
+        if HVAD_VERSION >= (2, 0, 0):
+            name = getattr(self.translations.active, 'name', str(self.pk))
+        else:
+            name = self.lazy_translation_getter('name', str(self.pk))
+        return name
 
     def get_absolute_url(self, language=None):
         language = language or get_current_language()
@@ -98,7 +108,11 @@ class Tag(TranslatableModel):
         unique_together = (('slug', 'language_code'),)
 
     def __str__(self):
-        return self.lazy_translation_getter('name', str(self.pk))
+        if HVAD_VERSION >= (2, 0, 0):
+            name = getattr(self.translations.active, 'name', str(self.pk))
+        else:
+            name = self.lazy_translation_getter('name', str(self.pk))
+        return name
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -177,7 +191,11 @@ class News(TranslatableModel):
         unique_together = (('slug', 'language_code'),)
 
     def __str__(self):
-        return self.lazy_translation_getter('title', str(self.pk))
+        if HVAD_VERSION >= (2, 0, 0):
+            title = getattr(self.translations.active, 'title', str(self.pk))
+        else:
+            title = self.lazy_translation_getter('title', str(self.pk))
+        return title
 
     def get_absolute_url(self, language=None):
         language = language or get_current_language()
