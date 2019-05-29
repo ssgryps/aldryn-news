@@ -3,7 +3,6 @@
 
 
 from django.db import migrations, models
-import django.db.models.deletion
 import django.db.models.manager
 
 
@@ -38,26 +37,26 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='categorytranslation',
             name='master',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='aldryn_news.Category'),
+            field=models.ForeignKey(editable=False, on_delete=models.CASCADE, related_name='translations', to='aldryn_news.Category'),
         ),
         migrations.AlterField(
             model_name='latestnewsplugin',
             name='cmsplugin_ptr',
-            field=models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='aldryn_news_latestnewsplugin', serialize=False, to='cms.CMSPlugin'),
+            field=models.OneToOneField(auto_created=True, on_delete=models.CASCADE, parent_link=True, primary_key=True, related_name='aldryn_news_latestnewsplugin', serialize=False, to='cms.CMSPlugin'),
         ),
         migrations.AlterField(
             model_name='newslinksplugin',
             name='cmsplugin_ptr',
-            field=models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='aldryn_news_newslinksplugin', serialize=False, to='cms.CMSPlugin'),
+            field=models.OneToOneField(auto_created=True, on_delete=models.CASCADE, parent_link=True, primary_key=True, related_name='aldryn_news_newslinksplugin', serialize=False, to='cms.CMSPlugin'),
         ),
         migrations.AlterField(
             model_name='newstranslation',
             name='master',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='aldryn_news.News'),
+            field=models.ForeignKey(editable=False, on_delete=models.CASCADE, related_name='translations', to='aldryn_news.News'),
         ),
         migrations.AlterField(
             model_name='tagtranslation',
             name='master',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='aldryn_news.Tag'),
+            field=models.ForeignKey(editable=False, on_delete=models.CASCADE, related_name='translations', to='aldryn_news.Tag'),
         ),
     ]

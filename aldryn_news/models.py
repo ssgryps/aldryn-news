@@ -120,7 +120,7 @@ class Tag(TranslatableModel):
 
 class TaggedItemBase(TaggitItemBase):
 
-    tag = models.ForeignKey(Tag, related_name="%(app_label)s_%(class)s_items", on_delete=models.deletion.CASCADE)
+    tag = models.ForeignKey(Tag, related_name="%(app_label)s_%(class)s_items", on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
@@ -165,7 +165,7 @@ class News(TranslatableModel):
                                  blank=True,
                                  null=True,
                                  help_text=_('WARNING! Used in the URL. If changed, the URL will change.'),
-                                 on_delete=models.deletion.CASCADE)
+                                 on_delete=models.CASCADE)
     objects = RelatedManager()
     published = PublishedManager()
     tags = TaggableManager(blank=True, through=TaggedItem, manager=CustomTaggableManager)
