@@ -7,7 +7,7 @@ from django_select2.forms import Select2MultipleWidget
 from hvad.forms import TranslatableModelForm
 from unidecode import unidecode
 
-from .models import News
+from .models import News, Category
 
 
 class MultipleTagForm(forms.ModelForm):
@@ -96,6 +96,10 @@ class CategoryForm(AutoSlugForm):
 
 class NewsForm(AutoSlugForm):
     slugified_field = 'title'
+
+    def __init__(self, *args, **kwargs):
+        super(NewsForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.language()
 
 
 class LinksForm(forms.ModelForm):
