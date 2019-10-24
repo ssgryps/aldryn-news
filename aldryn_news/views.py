@@ -19,7 +19,12 @@ class BaseNewsView(object):
             manager = News.objects
         else:
             manager = News.published
-        return manager.language()
+        manager = manager.language()
+
+        if not self.request.user.is_staff:
+            # https://github.com/KristianOellegaard/django-hvad/issues/86
+            manager = manager.get_published()
+        return manager
 
 
 class ArchiveView(BaseNewsView, ArchiveIndexView):

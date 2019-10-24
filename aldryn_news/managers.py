@@ -7,6 +7,7 @@ from django.db import models, router
 from django.db.models import signals
 from django.utils import timezone
 from hvad.models import TranslationManager
+from hvad.manager import TranslationQueryset
 from taggit.managers import _TaggableManager
 from taggit.models import Tag, TaggedItem
 from taggit.utils import require_instance_manager
@@ -64,7 +65,7 @@ class RelatedManager(TranslationManager):
         return sorted(tags, key=lambda x: -x.count)
 
     def get_months(self, language):
-        """Get months with aggregatet count (how much news is in the month). Results are ordered by date."""
+        """Get months with aggregated count (how much news is in the month). Results are ordered by date."""
         # done via naive way as django's having tough time while aggregating on date fields
         news = self.language(language)
         dates = news.values_list('publication_start', flat=True)
@@ -76,6 +77,17 @@ class RelatedManager(TranslationManager):
                  'count': date_counter[year, month]} for year, month in dates]
 
 
+class NewsTranslationQueryset(TranslationQueryset):
+    """
+    https://github.com/KristianOellegaard/django-hvad/issues/86
+    """
+
+    def get_published(self):
+        qs = self.filter(publication_start__lte=timezone.now())
+        qs = qs.filter(models.Q(publication_end__isnull=True) | models.Q(publication_end__gte=timezone.now()))
+        return qs
+
+
 class PublishedManager(RelatedManager):
 
     def get_queryset(self):
@@ -83,6 +95,9 @@ class PublishedManager(RelatedManager):
         qs = qs.filter(publication_start__lte=timezone.now())
         qs = qs.filter(models.Q(publication_end__isnull=True) | models.Q(publication_end__gte=timezone.now()))
         return qs
+
+    def get_published(self):
+        return self.get_queryset().get_published()
 
 
 class TagManager(TranslationManager):

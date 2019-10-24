@@ -24,7 +24,8 @@ from taggit.models import (GenericTaggedItemBase as TaggitGenericTaggedItemBase,
                            ItemBase as TaggitItemBase)
 from unidecode import unidecode
 
-from .managers import (CategoryManager, PublishedManager, RelatedManager, TagManager, CustomTaggableManager)
+from .managers import (CategoryManager, PublishedManager, RelatedManager, TagManager, CustomTaggableManager,
+                       NewsTranslationQueryset)
 
 
 def get_slug_in_language(record, language):
@@ -181,7 +182,7 @@ class News(TranslatableModel):
                                  help_text=_('WARNING! Used in the URL. If changed, the URL will change.'),
                                  on_delete=models.CASCADE)
     objects = RelatedManager()
-    published = PublishedManager()
+    published = PublishedManager(queryset_class=NewsTranslationQueryset)
     tags = TaggableManager(blank=True, through=TaggedItem, manager=CustomTaggableManager)
 
     class Meta:
