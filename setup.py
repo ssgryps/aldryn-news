@@ -7,6 +7,7 @@ REQUIREMENTS = [
     'django-hvad',
     'django_select2>=5.11.1,<6',
     'django-taggit',
+    'django-taggit-labels',
     'djangocms-text-ckeditor',
     'translitcodec',
     'Unidecode',

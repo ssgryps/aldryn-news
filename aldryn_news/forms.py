@@ -5,9 +5,11 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, ugettext
 from django_select2.forms import Select2MultipleWidget
 from hvad.forms import TranslatableModelForm
+from taggit.forms import TagField
+from taggit_labels.widgets import LabelWidget
 from unidecode import unidecode
 
-from .models import News, Category
+from .models import News, Category, Tag
 
 
 class MultipleTagForm(forms.ModelForm):
@@ -96,6 +98,7 @@ class CategoryForm(AutoSlugForm):
 
 class NewsForm(AutoSlugForm):
     slugified_field = 'title'
+    tags = TagField(required=False, widget=LabelWidget(model=Tag))
 
     def __init__(self, *args, **kwargs):
         super(NewsForm, self).__init__(*args, **kwargs)
