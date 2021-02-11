@@ -121,13 +121,14 @@ class CustomTaggableManager(_TaggableManager):
         """
         db = router.db_for_write(self.through, instance=self.instance)
         clear = kwargs.pop("clear", False)
+        tag_kwargs = kwargs.pop("tag_kwargs", {})
 
         if clear:
             self.clear()
             self.add(*tags)
         else:
             # make sure we're working with a collection of a uniform type
-            objs = self._to_tag_model_instances(tags)
+            objs = self._to_tag_model_instances(tags, tag_kwargs)
 
             # get the existing tag strings
             old_tag_strs = set(

@@ -6,7 +6,7 @@ REQUIREMENTS = [
     'django-filer',
     'django-hvad',
     'django_select2>=5.11.1,<6',
-    'django-taggit',
+    'django-taggit>=1.2',
     'django-taggit-labels',
     'djangocms-text-ckeditor',
     'translitcodec',
