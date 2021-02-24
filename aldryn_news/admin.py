@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-from django.contrib import admin
-
-from aldryn_news.forms import NewsForm, CategoryForm
-from aldryn_news.models import News, Category, Tag, TaggedItem
+from distutils.version import LooseVersion
 
 import cms
-from cms.admin.placeholderadmin import PlaceholderAdmin
-from cms.admin.placeholderadmin import FrontendEditableAdmin
-from distutils.version import LooseVersion
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin, PlaceholderAdminMixin
+from django.contrib import admin
 from hvad.admin import TranslatableAdmin
 
+from aldryn_news.forms import CategoryForm, NewsForm
+from aldryn_news.models import Category, News, Tag, TaggedItem
 
-class NewsAdmin(FrontendEditableAdmin, TranslatableAdmin, PlaceholderAdmin):
 
-    list_display = ['__unicode__', 'publication_start', 'publication_end', 'all_translations']
+class NewsAdmin(TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin, admin.ModelAdmin):
+    list_display = ['__str__', 'publication_start', 'publication_end', 'all_translations']
     form = NewsForm
     frontend_editable_fields = ('title', 'lead_in')
 
@@ -32,13 +30,10 @@ class NewsAdmin(FrontendEditableAdmin, TranslatableAdmin, PlaceholderAdmin):
 
         return fieldsets
 
-admin.site.register(News, NewsAdmin)
-
 
 class CategoryAdmin(TranslatableAdmin):
-
     form = CategoryForm
-    list_display = ['__unicode__', 'all_translations', 'ordering']
+    list_display = ['__str__', 'all_translations', 'ordering']
     list_editable = ['ordering']
 
     def get_fieldsets(self, request, obj=None):
@@ -47,16 +42,13 @@ class CategoryAdmin(TranslatableAdmin):
         ]
         return fieldsets
 
-admin.site.register(Category, CategoryAdmin)
-
 
 class TaggedItemInline(admin.StackedInline):
     model = TaggedItem
 
 
 class TagAdmin(TranslatableAdmin):
-
-    list_display = ['__unicode__', 'all_translations']
+    list_display = ['__str__', 'all_translations']
     inlines = [TaggedItemInline]
 
     def get_fieldsets(self, request, obj=None):
@@ -66,4 +58,6 @@ class TagAdmin(TranslatableAdmin):
         return fieldsets
 
 
+admin.site.register(News, NewsAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)

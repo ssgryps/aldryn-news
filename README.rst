@@ -28,6 +28,7 @@ Add below apps to ``INSTALLED_APPS``: ::
     INSTALLED_APPS = [
         …
         'taggit',
+        'taggit_labels',
         'aldryn_news',
         'aldryn_search',
         'django_select2',

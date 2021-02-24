@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.views.generic.dates import ArchiveIndexView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.shortcuts import get_object_or_404
-from django.http import Http404
+from menus.utils import set_language_changer
 
 from aldryn_news import request_news_identifier
-from aldryn_news.models import News, Category, Tag
-
-from menus.utils import set_language_changer
+from aldryn_news.models import Category, News, Tag
 
 
 class BaseNewsView(object):
@@ -20,7 +19,12 @@ class BaseNewsView(object):
             manager = News.objects
         else:
             manager = News.published
-        return manager.language()
+        manager = manager.language()
+
+        if not self.request.user.is_staff:
+            # https://github.com/KristianOellegaard/django-hvad/issues/86
+            manager = manager.get_published()
+        return manager
 
 
 class ArchiveView(BaseNewsView, ArchiveIndexView):
@@ -56,7 +60,7 @@ class TaggedListView(BaseNewsView, ListView):
         qs = super(TaggedListView, self).get_queryset()
         # can't filter by tags (m2m) on TranslatedQuerySet
         tags = Tag.objects.filter(slug=self.kwargs['tag'])
-        tagged = News.objects.filter(tags__in=tags)
+        tagged = News.objects.filter(tags__id__in=tags)
         tagged_pks = list(tagged.values_list('pk', flat=True))
         return qs.filter(pk__in=tagged_pks)
 

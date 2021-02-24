@@ -33,7 +33,7 @@ class Migration(SchemaMigration):
         db.create_table('aldryn_news_taggeditem', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('object_id', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name=u'aldryn_news_taggeditem_tagged_items', to=orm['contenttypes.ContentType'])),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='aldryn_news_taggeditem_tagged_items', to=orm['contenttypes.ContentType'])),
             ('tag', self.gf('django.db.models.fields.related.ForeignKey')(related_name='aldryn_news_taggeditem_items', to=orm['aldryn_news.Tag'])),
         ))
         db.send_create_signal('aldryn_news', ['TaggedItem'])

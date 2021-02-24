@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
-
 from cms.toolbar_base import CMSToolbar
 from cms.toolbar_pool import toolbar_pool
+try:
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from aldryn_news import request_news_identifier
 

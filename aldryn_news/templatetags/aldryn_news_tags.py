@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
+from cms.utils import get_language_from_request
 from django import template
 from django.conf import settings
 from django.utils.translation import get_language
 
-from cms.utils import get_language_from_request
-
 from aldryn_news.models import News
-
 
 register = template.Library()
 
@@ -20,7 +18,7 @@ def get_language_from_context(context):
         return get_language() or settings.LANGUAGE_CODE
 
 
-@register.assignment_tag(name='news_tags', takes_context=True)
+@register.simple_tag(name='news_tags', takes_context=True)
 def get_news_tags(context, news_ids):
     if news_ids:
         current_language = get_language_from_context(context)

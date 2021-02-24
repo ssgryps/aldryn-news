@@ -2,36 +2,23 @@
 from django import forms
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext, get_language
-
-import django_select2
+from django.utils.translation import get_language, ugettext
+from django_select2.forms import Select2MultipleWidget
 from hvad.forms import TranslatableModelForm
-import taggit
+from taggit.forms import TagField
+from taggit_labels.widgets import LabelWidget
 from unidecode import unidecode
 
-from .models import Tag, News
+from .models import News, Category, Tag
 
 
 class MultipleTagForm(forms.ModelForm):
 
     class Meta:
         widgets = {
-            'tags': django_select2.Select2MultipleWidget
+            'tags': Select2MultipleWidget
         }
-
-
-class NewsTagWidget(django_select2.widgets.Select2Mixin, taggit.forms.TagWidget):
-
-    def __init__(self, *args, **kwargs):
-        options = kwargs.get('select2_options', {})
-        options['tags'] = list(Tag.objects.values_list('name', flat=True))
-        options['tokenSeparators'] = [' ', ',']
-        kwargs['select2_options'] = options
-        super(NewsTagWidget, self).__init__(*args, **kwargs)
-
-    def render_js_code(self, *args, **kwargs):
-        js_code = super(NewsTagWidget, self).render_js_code(*args, **kwargs)
-        return js_code.replace('$', 'jQuery')
+        fields = '__all__'
 
 
 class AutoSlugForm(TranslatableModelForm):
@@ -41,6 +28,9 @@ class AutoSlugForm(TranslatableModelForm):
 
     def clean(self):
         super(AutoSlugForm, self).clean()
+
+        # Fix 'This QueryDict instance is immutable'
+        self.data = self.data.copy()
 
         if not self.fields.get(self.slug_field):
             return self.cleaned_data
@@ -100,7 +90,6 @@ class AutoSlugForm(TranslatableModelForm):
 
 
 class CategoryForm(AutoSlugForm):
-
     slugified_field = 'name'
 
     class Meta:
@@ -108,13 +97,12 @@ class CategoryForm(AutoSlugForm):
 
 
 class NewsForm(AutoSlugForm):
-
     slugified_field = 'title'
+    tags = TagField(required=False, widget=LabelWidget(model=Tag))
 
-    class Meta:
-        widgets = {
-            'tags': NewsTagWidget
-        }
+    def __init__(self, *args, **kwargs):
+        super(NewsForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.language()
 
 
 class LinksForm(forms.ModelForm):
@@ -125,3 +113,4 @@ class LinksForm(forms.ModelForm):
 
     class Meta:
         model = News
+        fields = '__all__'

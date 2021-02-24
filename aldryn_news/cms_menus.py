@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import NoReverseMatch
-from django.db.models.signals import post_save, post_delete
-from django.utils.translation import ugettext_lazy as _
-
-from aldryn_news.models import Category
-
 from cms.menu_bases import CMSAttachMenu
+try:
+    from django.core.urlresolvers import NoReverseMatch
+except ImportError:
+    from django.urls import NoReverseMatch
+from django.db.models.signals import post_delete, post_save
+from django.utils.translation import ugettext_lazy as _
 from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 
+from aldryn_news.models import Category
+
 
 class NewsCategoryMenu(CMSAttachMenu):
-
     name = _('News')
 
     def get_nodes(self, request):
@@ -29,11 +30,12 @@ class NewsCategoryMenu(CMSAttachMenu):
                 pass
         return nodes
 
-menu_pool.register_menu(NewsCategoryMenu)
-
 
 def clear_menu_cache(**kwargs):
     menu_pool.clear(all=True)
 
+
 post_save.connect(clear_menu_cache, sender=Category)
 post_delete.connect(clear_menu_cache, sender=Category)
+
+menu_pool.register_menu(NewsCategoryMenu)

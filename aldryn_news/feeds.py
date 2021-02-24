@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
-from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext as _
+try:
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 
-from aldryn_news.models import News, Category
+from aldryn_news.models import Category, News
 
 LATEST_ENTRIES = 10
 
