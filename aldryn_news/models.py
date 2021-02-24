@@ -246,7 +246,7 @@ class LatestNewsPlugin(CMSPlugin):
         self.tags = oldinstance.tags.all()
 
     def get_news(self):
-        news = News.published.language(self.language).select_related('category')
+        news = News.published.language(self.language).get_published().select_related('category')
         tags = list(self.tags.all())
         if tags:
             tagged_news = News.objects.filter(tags__in=tags)
