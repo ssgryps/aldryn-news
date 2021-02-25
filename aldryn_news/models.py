@@ -243,7 +243,7 @@ class LatestNewsPlugin(CMSPlugin):
         return str(self.latest_entries)
 
     def copy_relations(self, oldinstance):
-        self.tags = oldinstance.tags.all()
+        self.tags.set(oldinstance.tags.all())
 
     def get_news(self):
         news = News.published.language(self.language).get_published().select_related('category')
